@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --neon-green: #32ff7e;
+  --neon-green-dark: #19e56a;
+  --neon-mint: #a4ffb0;
+  --dark-bg: #0a0a0a;
+  --dark-panel: #1a1a1a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--dark-bg);
+  color: white;
+  font-family: 'Pixelify Sans', monospace;
+  overflow-x: hidden;
+}
+
+.font-pixel {
+  font-family: 'Pixelify Sans', monospace;
+}
+
+.text-neon-green {
+  color: var(--neon-green);
+}
+
+.text-neon-mint {
+  color: var(--neon-mint);
+}
+
+.bg-dark {
+  background-color: var(--dark-bg);
+}
+
+.neon-text {
+  text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green), 0 0 30px var(--neon-green);
+}
+
+.neon-glow {
+  filter: drop-shadow(0 0 5px var(--neon-green)) drop-shadow(0 0 10px var(--neon-green));
+}
+
+.neon-panel {
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(50, 255, 126, 0.3);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(50, 255, 126, 0.1);
+}
+
+.neon-card {
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(50, 255, 126, 0.2);
+  border-radius: 6px;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.neon-card:hover {
+  border-color: rgba(50, 255, 126, 0.4);
+  box-shadow: 0 0 15px rgba(50, 255, 126, 0.1);
+}
+
+code {
+  background: rgba(50, 255, 126, 0.1);
+  border: 1px solid rgba(50, 255, 126, 0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: 'Pixelify Sans', monospace;
+  font-size: 0.9em;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(26, 26, 26, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(50, 255, 126, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(50, 255, 126, 0.5);
+}
+
+/* Custom input and textarea styling */
+input, textarea {
+  font-family: 'Pixelify Sans', monospace;
+}
+
+input:focus, textarea:focus {
+  box-shadow: 0 0 0 2px rgba(50, 255, 126, 0.3);
+}
+
+/* Button hover effects */
+button {
+  font-family: 'Pixelify Sans', monospace;
+  transition: all 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+/* Line numbers for code */
+.line-numbers {
+  counter-reset: line;
+}
+
+.line-numbers .line:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2em;
+  margin-right: 0.5em;
+  color: rgba(164, 255, 176, 0.5);
+  text-align: right;
+}
