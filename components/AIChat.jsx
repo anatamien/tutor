@@ -1,17 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 function AIChat() {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const chatManagerRef = useRef(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    chatManagerRef.current = new window.ChatManager(
-      'You are a Node.js tutor AI assistant. Help users learn Node.js concepts, debug code, and understand best practices. Provide clear, concise explanations with practical examples. Focus on Node.js core modules, npm, Express.js, asynchronous programming, and common development patterns. Never use emojis or smileys in your responses.'
-    );
-
     // Add welcome message
     setMessages([{
       role: 'assistant',
@@ -27,7 +22,46 @@ function AIChat() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
+  const getAIResponse = (userInput) => {
+    const input = userInput.toLowerCase();
+
+    if (input.includes('hello') || input.includes('hi') || input.includes('hey')) {
+      return "Hello! I'm here to help you learn Node.js. What specific topic would you like to explore? I can explain concepts like modules, async programming, file systems, or help debug code.";
+    }
+    
+    if (input.includes('module') || input.includes('require') || input.includes('import')) {
+      return "Node.js modules are the building blocks of applications. There are three types:\n\n1. Core modules (built-in): fs, http, path, os\n2. Local modules: your own files using module.exports\n3. Third-party modules: installed via npm\n\nExample:\n```javascript\nconst fs = require('fs'); // core module\nconst myModule = require('./myFile'); // local\nconst express = require('express'); // third-party\n```\n\nWould you like me to explain any specific module type?";
+    }
+    
+    if (input.includes('async') || input.includes('promise') || input.includes('await') || input.includes('callback')) {
+      return "Asynchronous programming is key in Node.js! Here are the main patterns:\n\n1. Callbacks (traditional):\n```javascript\nfs.readFile('file.txt', (err, data) => {\n  if (err) throw err;\n  console.log(data);\n});\n```\n\n2. Promises (modern):\n```javascript\nconst readFile = util.promisify(fs.readFile);\nreadFile('file.txt').then(data => console.log(data));\n```\n\n3. Async/Await (cleanest):\n```javascript\nasync function readData() {\n  try {\n    const data = await readFile('file.txt');\n    console.log(data);\n  } catch (err) {\n    console.error(err);\n  }\n}\n```\n\nWhich pattern would you like to practice?";
+    }
+    
+    if (input.includes('express') || input.includes('server') || input.includes('http') || input.includes('api')) {
+      return "Express.js is the most popular Node.js web framework. Here's a basic setup:\n\n```javascript\nconst express = require('express');\nconst app = express();\n\n// Middleware\napp.use(express.json());\n\n// Routes\napp.get('/', (req, res) => {\n  res.json({ message: 'Hello World!' });\n});\n\napp.post('/users', (req, res) => {\n  const { name, email } = req.body;\n  res.json({ id: 1, name, email });\n});\n\napp.listen(3000, () => {\n  console.log('Server running on port 3000');\n});\n```\n\nWant to learn about routing, middleware, or error handling?";
+    }
+    
+    if (input.includes('file') || input.includes('fs')) {
+      return "The fs (file system) module lets you work with files and directories:\n\n**Reading files:**\n```javascript\nconst fs = require('fs').promises;\n\n// Async/await\nconst data = await fs.readFile('file.txt', 'utf8');\n\n// Synchronous (blocking)\nconst data = fs.readFileSync('file.txt', 'utf8');\n```\n\n**Writing files:**\n```javascript\nawait fs.writeFile('output.txt', 'Hello World!');\n```\n\n**Working with directories:**\n```javascript\nconst files = await fs.readdir('./directory');\n```\n\nAlways prefer async methods to avoid blocking the event loop. Need help with a specific file operation?";
+    }
+    
+    if (input.includes('npm') || input.includes('package')) {
+      return "npm (Node Package Manager) is essential for Node.js development:\n\n**Common commands:**\n• `npm init` - Create package.json\n• `npm install <package>` - Install package locally\n• `npm install -g <package>` - Install globally\n• `npm install --save-dev <package>` - Dev dependency\n• `npm start` - Run start script\n• `npm test` - Run tests\n\n**package.json structure:**\n```json\n{\n  \"name\": \"my-app\",\n  \"version\": \"1.0.0\",\n  \"scripts\": {\n    \"start\": \"node app.js\",\n    \"dev\": \"nodemon app.js\"\n  },\n  \"dependencies\": {\n    \"express\": \"^4.18.0\"\n  }\n}\n```\n\nWhat aspect of package management interests you?";
+    }
+    
+    if (input.includes('error') || input.includes('debug') || input.includes('try') || input.includes('catch')) {
+      return "Error handling is crucial in Node.js applications:\n\n**Try/Catch with async/await:**\n```javascript\nasync function handleOperation() {\n  try {\n    const result = await riskyOperation();\n    return result;\n  } catch (error) {\n    console.error('Error:', error.message);\n    throw error; // Re-throw if needed\n  }\n}\n```\n\n**Error-first callbacks:**\n```javascript\nfs.readFile('file.txt', (err, data) => {\n  if (err) {\n    console.error('File read error:', err);\n    return;\n  }\n  processData(data);\n});\n```\n\n**Global error handlers:**\n```javascript\nprocess.on('uncaughtException', (err) => {\n  console.error('Uncaught Exception:', err);\n  process.exit(1);\n});\n```\n\nWhat type of error handling scenario are you working with?";
+    }
+    
+    if (input.includes('test') || input.includes('jest') || input.includes('mocha')) {
+      return "Testing is essential for reliable Node.js applications. Popular frameworks:\n\n**Jest (most popular):**\n```javascript\n// math.test.js\nconst { add } = require('./math');\n\ntest('adds 1 + 2 to equal 3', () => {\n  expect(add(1, 2)).toBe(3);\n});\n\ntest('async operation', async () => {\n  const result = await asyncFunction();\n  expect(result).toEqual({ success: true });\n});\n```\n\n**Mocha with Chai:**\n```javascript\nconst chai = require('chai');\nconst expect = chai.expect;\n\ndescribe('Math functions', () => {\n  it('should add numbers correctly', () => {\n    expect(add(2, 3)).to.equal(5);\n  });\n});\n```\n\nSetup: `npm install --save-dev jest` or `npm install --save-dev mocha chai`\n\nWhat testing scenario do you need help with?";
+    }
+
+    // Default response for unrecognized inputs
+    return "I'm here to help you learn Node.js! I can assist with:\n\n• Core concepts and modules\n• Asynchronous programming (callbacks, promises, async/await)\n• File system operations\n• Express.js and web servers\n• Package management with npm\n• Error handling and debugging\n• Testing strategies\n• Best practices\n\nWhat specific Node.js topic would you like to explore? Feel free to ask about code examples, explanations, or help with debugging!";
+  };
+
+  const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
 
     const userMessage = inputMessage;
@@ -35,21 +69,13 @@ function AIChat() {
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
 
     setIsLoading(true);
-    chatManagerRef.current.addMessage('user', userMessage);
 
-    try {
-      const response = await chatManagerRef.current.getCharacterResponse();
+    // Simulate thinking time
+    setTimeout(() => {
+      const response = getAIResponse(userMessage);
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
-      chatManagerRef.current.addMessage('assistant', response);
-    } catch (error) {
-      console.error('Error getting response:', error);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try asking your question again.'
-      }]);
-    }
-
-    setIsLoading(false);
+      setIsLoading(false);
+    }, 1000);
   };
 
   const handleKeyPress = (e) => {
@@ -60,7 +86,7 @@ function AIChat() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-dark/50">
+    <div className="h-full flex flex-col bg-dark/50 relative z-10">
       {/* Header */}
       <div className="p-4 border-b border-neon-green/20">
         <h3 className="text-lg font-bold text-neon-green">AI Tutor</h3>

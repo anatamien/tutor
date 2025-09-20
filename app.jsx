@@ -27,7 +27,7 @@ function App() {
 
   if (!isReady) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 relative z-10">
         <div className="w-16 h-16 border-4 border-neon-green border-t-transparent rounded-full animate-spin mb-4"></div>
         <p className="text-neon-green font-pixel text-lg">Loading Node.js Tutor...</p>
       </div>
